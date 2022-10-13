@@ -1,0 +1,106 @@
+<?xml version ="2.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bilbot">
+
+    <xacro:property name="chassis_lenght" value="0.5"/>
+    <xacro:property name="chassis_width" value="0.1"/>
+    <xacro:property name="chassis_height" value="0.35"/>
+    <xacro:property name="wheel_radius" value="0.06"/>
+    <xacro:property name="wheel_width" value="0.05"/>
+    <xacro:property name="wheel_to_base_y" value="0.225"/>
+    <xacro:property name="wheel_to_base_x" value="0.2"/>
+    <xacro:property name="wheel_to_base_z" value="0.075"/>
+
+    <xacro:include filename="$(find bilbot_description)/urdf/xacro/macro_roue.xacro" />
+    <xacro:include filename="$(find bilbot_description)/urdf/xacro/inertia.xacro" />
+
+
+    <material name="Red">
+        <color rgba="255 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <mesh filename="package://bilbot_description/urdf/3d_files/chassis.dae" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <origin xyz="0.4 0.25 0.05" rpy="${pi/2} 0.0 ${-pi/2}"/>
+   
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://bilbot_description/urdf/3d_files/chassis.dae" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <origin xyz="0.4 0.25 0.05" rpy="${pi/2} 0.0 ${-pi/2}"/>
+        </collision>
+    </link>
+
+    <link name="inertial_link">
+        <xacro:box_inertial density="0.5" l="0.5" w="0.5" h="0.5"/>
+    </link>
+
+
+    <joint name="inertial_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="inertial_link"/>
+    </joint>
+
+
+
+    <xacro:wheel_macro side="front_right">
+        <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+    </xacro:wheel_macro>
+
+    <xacro:wheel_macro side="front_left">
+        <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+    </xacro:wheel_macro>
+
+    <xacro:wheel_macro side="rear_right">
+        <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+    </xacro:wheel_macro>
+
+    <xacro:wheel_macro side="rear_left">
+        <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+    </xacro:wheel_macro>
+
+    <link name="imu_link" />
+    <joint name="imu_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+    </joint>    
+
+    <link name="camera" />
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera"/>
+        <origin xyz="${chassis_lenght+0.01} 0.0 0.5"/>
+    </joint>    
+
+    <link name="lidar_link" >
+	<visual>
+            <geometry>
+                <cylinder radius="0.06" length="0.07" />
+            </geometry>
+            <origin rpy="0 0.0 0.0"/>
+            <material name="Red"/>
+        </visual>
+    </link>
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_link"/>
+        <origin xyz="0.0 0.0 ${chassis_height}"/>
+    </joint>
+
+
+    
+
+
+
+    
+
+</robot>

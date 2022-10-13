@@ -1,0 +1,31 @@
+<?xml version ="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bilbot">
+
+<xacro:macro name="box_inertial" params="density l w h">
+    <xacro:property name="mass" value="${density*l*w*h*1000}"/> <!-- calcule de l'inertie d'une box (pour le chassis) -->
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass*(w*w+h*h)/12}" 
+		 ixy = "0" ixz = "0"
+                 iyy="${mass*(l*l+h*h)/12}" 
+   		 iyz = "0"
+                 izz="${mass*(l*l+h*h)/12}"/> 
+    </inertial>
+</xacro:macro>
+
+<xacro:macro name="cylinder_inertial" params="density r h">
+    <xacro:property name="mass" value="${density * 1000 * pi * r*r * h}"/> <!-- density in unit less must be converted in kg/m3 -->
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass/12*(3*r*r + h*h)}"
+                 ixy="0.0"
+                 ixz="0.0"
+                 iyy="${mass/12*(3*r*r + h*h)}"
+                 iyz="0.0"
+                 izz="${mass*r*r/2}"/> 
+    </inertial>
+</xacro:macro>
+
+
+
+</robot>
